@@ -70,3 +70,4 @@ samples/posix/zigbee_walker
 t_memcheck
 zdo_simple_desc_respond
 zdo_match_desc_request
+*.out

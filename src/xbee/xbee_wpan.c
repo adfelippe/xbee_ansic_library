@@ -179,8 +179,7 @@ int _xbee_wpan_tick( wpan_dev_t *dev)
 	@retval	-EINVAL	invalid parameter passed to function
 */
 xbee_wpan_debug
-int xbee_wpan_init( xbee_dev_t *xbee,
-	const wpan_endpoint_table_entry_t *ep_table)
+int xbee_wpan_init(xbee_dev_t *xbee, const wpan_endpoint_table_entry_t *ep_table)
 {
 	if (xbee == NULL || ep_table == NULL)
 	{

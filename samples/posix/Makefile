@@ -28,7 +28,7 @@ COMPILE = gcc -iquote$(INCDIR) -g -MMD -MP -Wall $(DEFINE)
 
 EXE = atinter install_ebl zcltime \
 		commissioning_client commissioning_server ipv4_client sms_client \
-		transparent_client zigbee_walker apply_profile xbee_term eblinfo \
+		transparent_client transparent_terminal zigbee_walker apply_profile xbee_term eblinfo \
 		network_scan gpm
 
 all : $(EXE)
@@ -52,6 +52,7 @@ SRCS = \
 		install_ebl.c \
 		ipv4_client.c \
 		transparent_client.c \
+		transparent_terminal.c \
 		ota_test.c \
 		xbee_term.c _xbee_term.c xbee_term_posix.c \
 		zcltime.c \
@@ -138,6 +139,14 @@ transparent_client_OBJECTS = $(zigbee_OBJECTS) transparent_client.o \
 	xbee_transparent_serial.o
 
 transparent_client : $(transparent_client_OBJECTS)
+	$(COMPILE) -o $@ $^
+
+transparent_terminal_OBJECTS = $(zigbee_OBJECTS) transparent_terminal.o \
+	$(atinter_OBJECTS) _nodetable.o \
+	xbee_discovery.o \
+	xbee_transparent_serial.o
+
+transparent_terminal : $(transparent_terminal_OBJECTS)
 	$(COMPILE) -o $@ $^
 
 install_ebl_OBJECTS = $(xbee_OBJECTS) install_ebl.o \

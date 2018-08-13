@@ -389,7 +389,7 @@ int xbee_ser_flowcontrol( xbee_serial_t *serial, int enabled)
 {
 	struct termios options;
 
-	XBEE_SER_CHECK( serial);
+	XBEE_SER_CHECK(serial);
 
 	// Get the current options for the port...
 	if (tcgetattr( serial->fd, &options) == -1)
@@ -410,7 +410,7 @@ int xbee_ser_flowcontrol( xbee_serial_t *serial, int enabled)
 	}
 
 	// Set the new options for the port immediately
-	if (tcsetattr( serial->fd, TCSANOW, &options) == -1)
+	if (tcsetattr(serial->fd, TCSANOW, &options) == -1)
 	{
 		#ifdef XBEE_SERIAL_VERBOSE
 			printf( "%s: %s failed (%d)\n", __FUNCTION__, "tcsetattr", errno);

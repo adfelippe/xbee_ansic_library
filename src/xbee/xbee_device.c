@@ -122,12 +122,12 @@ uint8_t xbee_next_frame_id( xbee_dev_t *xbee)
 				before continuing.
 */
 _xbee_device_debug
-int xbee_dev_init( xbee_dev_t *xbee, const xbee_serial_t *serport,
-											xbee_is_awake_fn is_awake, xbee_reset_fn reset)
+int xbee_dev_init(xbee_dev_t *xbee, const xbee_serial_t *serport,
+		  xbee_is_awake_fn is_awake, xbee_reset_fn reset)
 {
 	int error;
 
-	if (! xbee)
+	if (!xbee)
 	{
 		return -EINVAL;
 	}
@@ -139,21 +139,21 @@ int xbee_dev_init( xbee_dev_t *xbee, const xbee_serial_t *serport,
 	// try communicating with the XBee module
 	// set xbee to all zeros, then
 	// set up serial port and attempt communications with module
-	memset( xbee, 0, sizeof( xbee_dev_t));
+	memset(xbee, 0, sizeof(xbee_dev_t));
 
 	// configuration for serial XBee
 	xbee->is_awake = is_awake;	// function to read XBee's "ON" pin
 	if (reset)
 	{
 		xbee->reset = reset;		// function to assert XBee's reset pin
-		reset( xbee, 0);			// take XBee out of reset state
+		reset(xbee, 0);			// take XBee out of reset state
 	}
 
 	xbee->serport = *serport;
-	error = xbee_ser_open( &xbee->serport, serport->baudrate);
-	if (! error)
+	error = xbee_ser_open(&xbee->serport, serport->baudrate);
+	if (!error)
 	{
-		error = xbee_ser_flowcontrol( &xbee->serport, 1);
+		error = xbee_ser_flowcontrol(&xbee->serport, 1);
 	}
 
 	xbee->flags = XBEE_DEV_FLAG_USE_FLOWCONTROL;
@@ -1048,4 +1048,3 @@ int xbee_frame_dump_modem_status( xbee_dev_t *xbee,
 
 	return 0;
 }
-

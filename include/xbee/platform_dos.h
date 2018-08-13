@@ -72,15 +72,15 @@ typedef struct xbee_serial_t {
 	uint16_t		comport;		// 1 = COM1, 2 = COM2 etc.
 	uint16_t		port;			// I/O address of UART: COM1 = 0x3F8 etc.
 	void (__interrupt FAR *prev_int)();		// Previous COM port interrupt handler
-	uint16_t		intvec;		// Interrupt vector number: 0x0C for COM1 etc.
+	uint16_t		intvec;			// Interrupt vector number: 0x0C for COM1 etc.
 	uint16_t		picmask;		// PIC mask bit (corresponding to IRQ): 1<<4 for IRQ4
-	uint8_t		lsr_mask;	// Mask of line status conditions that are enabled.
+	uint8_t			lsr_mask;	// Mask of line status conditions that are enabled.
 		// These determined by UART hardware...
-		#define	XST_MASK_DR			0x01			// Data Ready
-		#define	XST_MASK_OE			0x02			// Overrun error
-		#define	XST_MASK_PE			0x04			// Parity error
-		#define	XST_MASK_FE			0x08			// Frame error
-		#define	XST_MASK_BI			0x10			// Break interrupt
+		#define	XST_MASK_DR		0x01			// Data Ready
+		#define	XST_MASK_OE		0x02			// Overrun error
+		#define	XST_MASK_PE		0x04			// Parity error
+		#define	XST_MASK_FE		0x08			// Frame error
+		#define	XST_MASK_BI		0x10			// Break interrupt
 		#define	XST_MASK_THRE		0x20			// Tx holding reg empty
 		#define	XST_MASK_TEMT		0x40			// Tx shift register empty
 		#define	XST_MASK_FIFOE		0x80			// Rx FIFO error
@@ -129,4 +129,3 @@ void clrscr_ansi( void);
 #endif
 
 #endif		// __XBEE_PLATFORM_DOS
-

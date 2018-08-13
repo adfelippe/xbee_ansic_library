@@ -405,9 +405,9 @@ int xbee_ser_break( xbee_serial_t *serial, int enabled)
 /*** BeginHeader xbee_ser_flowcontrol */
 /*** EndHeader */
 _xbee_serial_debug
-int xbee_ser_flowcontrol( xbee_serial_t *serial, int enabled)
+int xbee_ser_flowcontrol(xbee_serial_t *serial, int enabled)
 {
-	XBEE_SER_CHECK( serial);
+	XBEE_SER_CHECK(serial);
 
 	if (enabled)
 	{
@@ -436,7 +436,7 @@ int xbee_ser_flowcontrol( xbee_serial_t *serial, int enabled)
 	}
 	else
 	{
-		serXflowcontrolOff( serial->port);
+		serXflowcontrolOff(serial->port);
 	}
 
 	return 0;

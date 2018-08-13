@@ -110,7 +110,7 @@ void xbee_disc_node_id_dump( const xbee_node_id_t FAR *ni)
 /*** BeginHeader xbee_disc_add_node_id_handler */
 /*** EndHeader */
 // documented in xbee/discovery.h
-int xbee_disc_add_node_id_handler( xbee_dev_t *xbee, xbee_disc_node_id_fn fn)
+int xbee_disc_add_node_id_handler(xbee_dev_t *xbee, xbee_disc_node_id_fn fn)
 {
 	if (xbee == NULL || fn == NULL)
 	{
@@ -234,7 +234,7 @@ int xbee_disc_atnd_response_handler( xbee_dev_t *xbee, const void FAR *raw,
 		{
 			// this is an unsuccessful ATND response, pass a NULL node_id to
 			// indicate that the NI request timed out.
-			if (xbee != NULL && xbee->node_id_handler != NULL) 
+			if (xbee != NULL && xbee->node_id_handler != NULL)
 			{
 				xbee->node_id_handler( xbee, NULL);
 			}

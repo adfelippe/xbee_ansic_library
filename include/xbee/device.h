@@ -379,19 +379,19 @@ typedef struct xbee_dev_t
 	*/
 		#define XBEE_HARDWARE_MASK				0xFF00
 		#define XBEE_HARDWARE_S1				0x1700
-		#define XBEE_HARDWARE_S1_PRO			0x1800
+		#define XBEE_HARDWARE_S1_PRO				0x1800
 		#define XBEE_HARDWARE_S2				0x1900
-		#define XBEE_HARDWARE_S2_PRO			0x1A00
-		#define XBEE_HARDWARE_900_PRO			0x1B00
-		#define XBEE_HARDWARE_868_PRO			0x1D00
-		#define XBEE_HARDWARE_S2B_PRO			0x1E00
-		#define XBEE_HARDWARE_S2C_PRO			0x2100
+		#define XBEE_HARDWARE_S2_PRO				0x1A00
+		#define XBEE_HARDWARE_900_PRO				0x1B00
+		#define XBEE_HARDWARE_868_PRO				0x1D00
+		#define XBEE_HARDWARE_S2B_PRO				0x1E00
+		#define XBEE_HARDWARE_S2C_PRO				0x2100
 		#define XBEE_HARDWARE_S2C				0x2200
 		#define XBEE_HARDWARE_S3B				0x2300		// XBee 900HP
 		#define XBEE_HARDWARE_S8				0x2400
 		#define XBEE_HARDWARE_S6B				0x2700		// XBee Wi-Fi
-		#define XBEE_HARDWARE_CELL_CAT1_VZW		0x4000
-		#define XBEE_HARDWARE_CELL_3G			0x4400
+		#define XBEE_HARDWARE_CELL_CAT1_VZW			0x4000
+		#define XBEE_HARDWARE_CELL_3G				0x4400
 	//@}
 
 	/// Value of XBee module's VR register (4-bytes on some devices)
@@ -404,23 +404,23 @@ typedef struct xbee_dev_t
 		// Series 2 (2.4 GHz) hardware
 		#define XBEE_PROTOCOL_ZNET				0x1000
 		#define XBEE_PROTOCOL_ZB				0x2000
-		#define XBEE_PROTOCOL_SMARTENERGY	0x3000
-		#define XBEE_PROTOCOL_ZB_S2C			0x4000
-		#define XBEE_PROTOCOL_SE_S2C			0x5000
+		#define XBEE_PROTOCOL_SMARTENERGY			0x3000
+		#define XBEE_PROTOCOL_ZB_S2C				0x4000
+		#define XBEE_PROTOCOL_SE_S2C				0x5000
 		// Series 4 (900 MHz) hardware
-		#define XBEE_PROTOCOL_MESHLESS		0x1000
-		#define XBEE_PROTOCOL_DIGIMESH		0x8000
+		#define XBEE_PROTOCOL_MESHLESS				0x1000
+		#define XBEE_PROTOCOL_DIGIMESH				0x8000
 
 		#define XBEE_NODETYPE_MASK				0x0F00
-		#define XBEE_NODETYPE_COORD			0x0100
-		#define XBEE_NODETYPE_ROUTER			0x0300
-		#define XBEE_NODETYPE_ENDDEV			0x0900
+		#define XBEE_NODETYPE_COORD				0x0100
+		#define XBEE_NODETYPE_ROUTER				0x0300
+		#define XBEE_NODETYPE_ENDDEV				0x0900
 	//@}
 
 	/// Multi-purpose flags for tracking information about this device.
 	enum xbee_dev_flags			flags;
 
-	uint8_t		frame_id;				///< last frame_id used for sending
+	uint8_t					frame_id;	///< last frame_id used for sending
 
 	// Need some state variables here if AT mode is supported (necessary when
 	// using modules with AT firmware instead of API firmware, or when doing
@@ -433,7 +433,7 @@ typedef struct xbee_dev_t
 
 	/// Current mode of the XBee device (e.g., boot loader, API, command).
 	#ifdef XBEE_DEVICE_ENABLE_ATMODE
-		enum xbee_dev_mode	mode;
+		enum xbee_dev_mode		mode;
 		uint32_t			mode_timer;		///< MS_TIMER value used for timeouts
 		uint16_t			guard_time;		///< value of GT (default 1000) * 1ms
 		uint16_t			idle_timeout;	///< value of CT (default 100) * 100ms
