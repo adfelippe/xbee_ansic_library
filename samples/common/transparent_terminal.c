@@ -62,6 +62,8 @@
 #include "wpan/types.h"
 #include "wpan/aps.h"
 #include "zigbee/zdo.h"
+#include "list.h"
+#include "runner.h"
 
 // Common code for handling AT command syntax and execution
 #include "_atinter.h"
@@ -72,17 +74,31 @@
 // Function for parsing serial port settings from command-line arguments
 #include "parse_serial_args.h"
 
+enum mode {
+	MODE_HOST,
+	MODE_CLIENT
+} terminal_mode;
+
 // An instance required for the local XBee
 xbee_dev_t my_xbee;
+// Node ID to be the target
+xbee_node_id_t *target = NULL;
+// Linked list for the command response
+static list cmd_response_list;
+//Mode
+int mode = MODE_HOST;
+//Prototypes
+int send_data(const xbee_node_id_t *node_id, void FAR *data, uint16_t length);
 
 
-void transparent_dump( const addr64 FAR *ieee, const void FAR *payload,
+void transparent_dump(const addr64 FAR *ieee, const void FAR *payload,
 		uint16_t length)
 {
 	xbee_node_id_t *node_id;
 	char buffer[ADDR64_STRING_LENGTH];
+	char response[MAX_CMD_LINE_SIZE];
 	const uint8_t FAR *message = payload;
-	uint16_t i;
+	uint16_t i, j, size;
 
 	printf( "%u bytes from ", length);
 
@@ -98,18 +114,28 @@ void transparent_dump( const addr64 FAR *ieee, const void FAR *payload,
 
 	for (i = 0; i < length && isprint( message[i]); ++i);
 
-	if (i == length)
-	{
-		// all characters of message are printable
+	if (mode == MODE_CLIENT) {
+		printf("%.*s\n", length, message);
+	} else if (mode == MODE_HOST) {
+		// host mode will run local command and transmit
 		printf( "\t%.*s\n", length, message);
 		char terminal_cmd[250] = {0};
-		strncpy(terminal_cmd, message, length);
+		strncpy(terminal_cmd, (char*)message, length);
 		printf("terminal_cmd = %s\n", terminal_cmd);
-		system(terminal_cmd);
-	}
-	else
-	{
-		hex_dump( message, length, HEX_DUMP_FLAG_TAB);
+		// Run command
+		run_system_command(terminal_cmd, &cmd_response_list);
+
+		size = list_size(&cmd_response_list);
+
+		for (j = 0; j < size; j++) {
+			memset(response, '\0', MAX_CMD_LINE_SIZE);
+			list_head(&cmd_response_list, (void*)response, true);
+			printf("%d\t %s", j, response);
+			send_data(target, response, strlen(response));
+		}
+
+	} else {
+		//hex_dump(message, length, HEX_DUMP_FLAG_TAB);
 	}
 }
 
@@ -283,7 +309,13 @@ int main(int argc, char *argv[])
 	int status;
 	int i;
 	xbee_serial_t XBEE_SERPORT;
-	xbee_node_id_t *target = NULL;
+
+	if (strcmp("host", argv[2]) == 0)
+		mode = MODE_HOST;
+	else if (strcmp("client", argv[2]) == 0)
+		mode = MODE_CLIENT;
+	else
+		printf("Second command argument is neither 'host' nor 'client'.\nAssuming HOST mode.\n");
 
 	parse_serial_arguments(argc, argv, &XBEE_SERPORT);
 
@@ -299,6 +331,11 @@ int main(int argc, char *argv[])
 
 	// Register handler to receive Node ID messages
 	xbee_disc_add_node_id_handler(&my_xbee, &node_discovered);
+
+	//Init list to store command response
+	if (list_new(&cmd_response_list, MAX_CMD_LINE_SIZE, NULL) != 0) {
+		printf("Failed to create list to store command response!\n");
+	}
 
 	// Initialize the AT Command layer for this XBee device and have the
 	// driver query it for basic information (hardware version, firmware version,
@@ -390,10 +427,16 @@ int main(int argc, char *argv[])
 	   	}
 	   	else
 	   	{
-	   		i = strlen( cmdstr);
-	   		printf( "sending %u bytes to '%s'\n", i, target->node_info);
-	   		send_data( target, cmdstr, i);
+			if (mode == MODE_CLIENT) {
+		   		i = strlen(cmdstr);
+		   		printf("sending %u bytes to '%s'\n", i, target->node_info);
+		   		send_data(target, cmdstr, i);
+			} else {
+				printf("< Terminal won't send commands in HOST mode >\n");
+			}
 	   	}
 	   }
    }
+
+   list_destroy(&cmd_response_list);
 }

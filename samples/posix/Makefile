@@ -20,11 +20,13 @@ INCDIR = $(DRIVER)/include
 # path to common source files
 SRCDIR = $(DRIVER)/src
 
+LIBS = -lpthread
+
 # compiler parameters for building each file
 # -MMD generates dependency files automatically, omitting system files
 # -MP creates phony targets for each prerequisite in a .d file
-
-COMPILE = gcc -iquote$(INCDIR) -g -MMD -MP -Wall $(DEFINE)
+ 
+COMPILE = gcc -iquote$(INCDIR) $(LIBS) -g -MMD -MP -Wall $(DEFINE)
 
 EXE = atinter install_ebl zcltime \
 		commissioning_client commissioning_server ipv4_client sms_client \
@@ -95,10 +97,15 @@ SRCS = \
 	swapbytes.c \
 	memcheck.c \
 	hexdump.c \
-	xbee_readline.c
+	xbee_readline.c \
+	runner.c \
+	list.c
+	
 
 base_OBJECTS = xbee_platform_posix.o xbee_serial_posix.o hexstrtobyte.o \
 					memcheck.o swapbytes.o swapcpy.o hexdump.o parse_serial_args.o
+
+util_OBJECTS = list.o runner.o
 
 xbee_OBJECTS = $(base_OBJECTS) xbee_device.o xbee_atcmd.o wpan_types.o
 
@@ -141,13 +148,13 @@ transparent_client_OBJECTS = $(zigbee_OBJECTS) transparent_client.o \
 transparent_client : $(transparent_client_OBJECTS)
 	$(COMPILE) -o $@ $^
 
-transparent_terminal_OBJECTS = $(zigbee_OBJECTS) transparent_terminal.o \
+transparent_terminal_OBJECTS = $(zigbee_OBJECTS) $(util_OBJECTS) transparent_terminal.o \
 	$(atinter_OBJECTS) _nodetable.o \
 	xbee_discovery.o \
 	xbee_transparent_serial.o
 
 transparent_terminal : $(transparent_terminal_OBJECTS)
-	$(COMPILE) -o $@ $^
+	$(COMPILE) -o $@ $^ $(LIBS)
 
 install_ebl_OBJECTS = $(xbee_OBJECTS) install_ebl.o \
 	xbee_atmode.o \
